@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:passport_mobile/pages/home_page.dart';
 import 'package:passport_mobile/pages/login_page.dart';
 import 'package:passport_mobile/pages/profile_page.dart';
 import 'package:passport_mobile/providers/login_provider.dart';
@@ -82,7 +83,7 @@ class _PassportState extends State<Passport> {
         },
         selectedIndex: currentPageIndex,
       ),
-      body: <Widget>[Text("1"), Text("2"), ProfilePage()][currentPageIndex],
+      body: <Widget>[Text("1"), HomePage(), ProfilePage()][currentPageIndex],
     );
   }
 }

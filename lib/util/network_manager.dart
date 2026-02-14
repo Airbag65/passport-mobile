@@ -56,3 +56,19 @@ Future<SignOutResponse?> requestSignOut() async {
 
   return SignOutResponse.fromJson(jsonDecode(response.body));
 }
+
+Future<List<String>> getPasswordHosts() async {
+  http.Response response = await http.get(
+    Uri.parse("https://192.168.1.151:443/pwd/getHosts"),
+    headers: <String, String>{
+      "Authorization": "Bearer ${getLocalInformation().authToken}",
+    },
+  );
+  if (response.statusCode != 200) {
+    return [];
+  }
+  Map<String, dynamic> data = jsonDecode(response.body);
+  List<String> l = [];
+  data["hosts"]?.forEach((element) => l.add(element));
+  return l;
+}
