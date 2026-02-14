@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:passport_mobile/pages/login_page.dart';
+import 'package:passport_mobile/util/network_manager.dart';
+import 'package:passport_mobile/util/storage.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -8,8 +11,17 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  void logout() {
-    print("logging out");
+  void logout(BuildContext context) {
+    requestSignOut().then((value) {
+      if (value != null) {
+        removeLocalAuth();
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute<void>(builder: (context) => LoginPage()),
+        );
+      }
+    });
   }
 
   @override
@@ -18,9 +30,15 @@ class _ProfilePageState extends State<ProfilePage> {
       body: Center(
         child: Column(
           children: [
-            Text("profile page"),
+            Text("PROFILE PAGE"),
+            Text("Some exciting stuff will eventually happen here"),
             Spacer(),
-            ElevatedButton(child: Text("Sign out"), onPressed: logout),
+            ElevatedButton(
+              onPressed: () {
+                logout(context);
+              },
+              child: Text("Sign out"),
+            ),
             SizedBox(height: 50),
           ],
         ),

@@ -3,11 +3,17 @@ import 'package:passport_mobile/main.dart';
 import 'package:passport_mobile/providers/login_provider.dart';
 import 'package:provider/provider.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  String errorMessage = "";
 
   void login(BuildContext ctx) async {
     LoginProvider provider = Provider.of<LoginProvider>(ctx, listen: false);
@@ -15,7 +21,9 @@ class LoginPage extends StatelessWidget {
       _emailController.text,
       _passwordController.text,
     )) {
-      // TODO: Show some error
+      setState(() {
+        errorMessage = "Wrong email or password!";
+      });
       return;
     }
     Navigator.pop(ctx);
@@ -65,6 +73,7 @@ class LoginPage extends StatelessWidget {
               onPressed: () => {login(context)},
               child: Text("Login"),
             ),
+            Text(errorMessage, style: TextStyle(color: Colors.red)),
           ],
         ),
       ),

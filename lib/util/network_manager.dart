@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:passport_mobile/models/login_models.dart';
 import 'package:http/http.dart' as http;
+import 'package:passport_mobile/models/signout_models.dart';
 import 'package:passport_mobile/models/validate_models.dart';
+import 'package:passport_mobile/util/storage.dart';
 
 class AllowUnsecure extends HttpOverrides {
   @override
@@ -38,4 +40,19 @@ Future<ValidateResponse?> tryValidate(String authToken) async {
     return null;
   }
   return ValidateResponse.fromJson(jsonDecode(response.body));
+}
+
+Future<SignOutResponse?> requestSignOut() async {
+  SignOutRequest req = SignOutRequest(email: getLocalInformation().email);
+  http.Response response = await http.put(
+    Uri.parse("https://192.168.1.151:443/auth/signOut"),
+    headers: <String, String>{"Content-Type": "application/json"},
+    body: jsonEncode(req.toJson()),
+  );
+
+  if (response.statusCode != 200) {
+    return null;
+  }
+
+  return SignOutResponse.fromJson(jsonDecode(response.body));
 }
