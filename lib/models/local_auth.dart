@@ -14,6 +14,11 @@ class LocalAuth {
   final String _email;
   final String _authToken;
 
+  String get name => _name;
+  String get surname => _surname;
+  String get email => _email;
+  String get authToken => _authToken;
+
   LocalAuth.fromJson(Map<String, dynamic> json)
     : _name = json["name"],
       _surname = json["surname"],

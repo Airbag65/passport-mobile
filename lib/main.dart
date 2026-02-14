@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:passport_mobile/pages/login_page.dart';
 import 'package:passport_mobile/providers/login_provider.dart';
+import 'package:passport_mobile/util/network_manager.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   await initLocalStorage();
+  HttpOverrides.global = AllowUnsecure();
   runApp(
     MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => LoginProvider())],
@@ -19,15 +23,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LoginProvider loginProvider = LoginProvider();
-    Widget startPage;
-    if (loginProvider.isLoggedIn) {
-      startPage = Passport();
-    } else {
-      startPage = LoginPage();
-    }
     return Consumer<LoginProvider>(
-      builder: (context, _, _) {
+      builder: (context, loginProviver, _) {
         return MaterialApp(
           title: 'PASSPORT',
           theme: ThemeData(
@@ -35,7 +32,7 @@ class MyApp extends StatelessWidget {
               seedColor: Color.fromARGB(255, 33, 170, 255),
             ),
           ),
-          home: startPage,
+          home: loginProviver.isLoggedIn ? Passport() : LoginPage(),
         );
       },
     );
@@ -50,7 +47,7 @@ class Passport extends StatefulWidget {
 }
 
 class _PassportState extends State<Passport> {
-  int currentPage = 1;
+  int currentPageIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -79,12 +76,12 @@ class _PassportState extends State<Passport> {
         ],
         onDestinationSelected: (int index) {
           setState(() {
-            currentPage = index;
+            currentPageIndex = index;
           });
         },
-        selectedIndex: currentPage,
+        selectedIndex: currentPageIndex,
       ),
-      body: <Widget>[Text("1"), Text("2"), Text("3")][currentPage],
+      body: <Widget>[Text("1"), Text("2"), Text("3")][currentPageIndex],
     );
   }
 }

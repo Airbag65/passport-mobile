@@ -1,0 +1,41 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:passport_mobile/models/login_models.dart';
+import 'package:http/http.dart' as http;
+import 'package:passport_mobile/models/validate_models.dart';
+
+class AllowUnsecure extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
+Future<LoginResponse?> requestLogin(String email, String password) async {
+  LoginRequest req = LoginRequest(email: email, password: password);
+  http.Response response = await http.post(
+    Uri.parse("https://192.168.1.151:443/auth/login"),
+    headers: <String, String>{"Content-Type": "application/json"},
+    body: jsonEncode(req.toJson()),
+  );
+  if (response.statusCode != 200) {
+    return null;
+  }
+  return LoginResponse.fromJson(jsonDecode(response.body));
+}
+
+Future<ValidateResponse?> tryValidate(String authToken) async {
+  ValidateRequest req = ValidateRequest(authToken: authToken);
+  http.Response response = await http.post(
+    Uri.parse("https://192.168.1.151:443/auth/valid"),
+    headers: <String, String>{"Content-Type": "application/json"},
+    body: jsonEncode(req.toJson()),
+  );
+  if (response.statusCode != 200) {
+    return null;
+  }
+  return ValidateResponse.fromJson(jsonDecode(response.body));
+}
