@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:passport_mobile/main.dart';
 import 'package:passport_mobile/providers/login_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -9,13 +10,16 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
 
   void login(BuildContext ctx) async {
-    LoginProvider provider = Provider.of<LoginProvider>(ctx);
+    LoginProvider provider = Provider.of<LoginProvider>(ctx, listen: false);
     if (!await provider.login(
       _emailController.text,
       _passwordController.text,
     )) {
       // TODO: Show some error
+      return;
     }
+    Navigator.pop(ctx);
+    Navigator.push(ctx, MaterialPageRoute<void>(builder: (ctx) => Passport()));
   }
 
   @override

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:passport_mobile/pages/login_page.dart';
 import 'package:passport_mobile/providers/login_provider.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  await initLocalStorage();
   runApp(
     MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => LoginProvider())],
@@ -17,38 +19,41 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final LoginProvider loginProvider = LoginProvider();
+    Widget startPage;
+    if (loginProvider.isLoggedIn) {
+      startPage = Passport();
+    } else {
+      startPage = LoginPage();
+    }
     return Consumer<LoginProvider>(
       builder: (context, _, _) {
         return MaterialApp(
-          title: 'flutter Demo',
+          title: 'PASSPORT',
           theme: ThemeData(
             colorScheme: .fromSeed(
               seedColor: Color.fromARGB(255, 33, 170, 255),
             ),
           ),
-          home: const MyHomePage(),
+          home: startPage,
         );
       },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class Passport extends StatefulWidget {
+  const Passport({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Passport> createState() => _PassportState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _PassportState extends State<Passport> {
   int currentPage = 1;
 
   @override
   Widget build(BuildContext context) {
-    final loginProvider = Provider.of<LoginProvider>(context);
-    if (!loginProvider.isLoggedIn) {
-      return LoginPage();
-    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,

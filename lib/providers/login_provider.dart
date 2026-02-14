@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class LoginProvider extends ChangeNotifier {
+  LoginProvider() {}
   String authToken = "";
   bool _isLoggedIn = false;
 
