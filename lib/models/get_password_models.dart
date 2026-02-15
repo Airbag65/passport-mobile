@@ -1,0 +1,16 @@
+class GetPasswordRequest {
+  GetPasswordRequest({required String hostName}) : _hostName = hostName;
+  final String _hostName;
+
+  Map<String, dynamic> toJson() => {"host_name": _hostName};
+}
+
+class GetPasswordResponse {
+  GetPasswordResponse({required String password}) : _password = password;
+  final String _password;
+
+  String get password => _password;
+
+  GetPasswordResponse.fromJson(Map<String, dynamic> json)
+    : _password = json["password"];
+}

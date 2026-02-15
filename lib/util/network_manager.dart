@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:passport_mobile/models/get_password_models.dart';
 import 'package:passport_mobile/models/login_models.dart';
 import 'package:http/http.dart' as http;
 import 'package:passport_mobile/models/signout_models.dart';
@@ -71,4 +72,20 @@ Future<List<String>> getPasswordHosts() async {
   List<String> l = [];
   data["hosts"]?.forEach((element) => l.add(element));
   return l;
+}
+
+Future<GetPasswordResponse?> requestPasswordWithHost(String host) async {
+  GetPasswordRequest req = GetPasswordRequest(hostName: host);
+  http.Response response = await http.put(
+    Uri.parse("https://192.168.1.151:443/pwd/get"),
+    headers: <String, String>{
+      "Authorization": "Bearer ${getLocalInformation().authToken}",
+    },
+    body: jsonEncode(req.toJson()),
+  );
+
+  if (response.statusCode != 200) {
+    return null;
+  }
+  return GetPasswordResponse.fromJson(jsonDecode(response.body));
 }
