@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:passport_mobile/util/network_manager.dart';
+import 'package:passport_mobile/widgets/host_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -33,11 +34,7 @@ class _HomePageState extends State<HomePage> {
               child: ListView.builder(
                 itemCount: hosts.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    height: 100,
-                    decoration: BoxDecoration(color: Colors.red),
-                    child: Text(hosts[index]),
-                  ); // TODO: Replace with actual thing
+                  return HostCard(hostName: hosts[index]);
                 },
               ),
             ),
