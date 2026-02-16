@@ -89,3 +89,18 @@ Future<GetPasswordResponse?> requestPasswordWithHost(String host) async {
   }
   return GetPasswordResponse.fromJson(jsonDecode(response.body));
 }
+
+Future<bool> requestPasswordRemoval(String host) async {
+  RemovePasswordRequest req = RemovePasswordRequest(hostName: host);
+  http.Response response = await http.delete(
+    Uri.parse("https://192.168.1.151:443/pwd/remove"),
+    headers: <String, String>{
+      "Authorization": "Bearer ${getLocalInformation().authToken}",
+    },
+    body: jsonEncode(req.toJson()),
+  );
+  if (response.statusCode != 200) {
+    return false;
+  }
+  return true;
+}

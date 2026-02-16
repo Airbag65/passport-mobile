@@ -14,3 +14,10 @@ class GetPasswordResponse {
   GetPasswordResponse.fromJson(Map<String, dynamic> json)
     : _password = json["password"];
 }
+
+class RemovePasswordRequest {
+  RemovePasswordRequest({required String hostName}) : _hostName = hostName;
+  final String _hostName;
+
+  Map<String, dynamic> toJson() => {"host_name": _hostName};
+}

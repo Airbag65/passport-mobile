@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:passport_mobile/models/get_password_models.dart';
 import 'package:passport_mobile/util/network_manager.dart';
+import 'package:passport_mobile/util/storage.dart';
 import 'package:passport_mobile/widgets/password_dialog.dart';
 
 class HostCard extends StatelessWidget {
@@ -26,6 +27,25 @@ class HostCard extends StatelessWidget {
         );
       },
     );
+  }
+
+  void deletePassword(BuildContext context) {
+    SnackBar errorSnackBar = SnackBar(
+      content: Text("Something went wrong, could not delete password"),
+    );
+    SnackBar confirmationSnackBar = SnackBar(
+      content: Text("Delete '$_hostName'? This action cannot be undone!"),
+      action: SnackBarAction(
+        label: "DELETE",
+        onPressed: () async {
+          if (!await requestPasswordRemoval(_hostName)) {
+            ScaffoldMessenger.of(context).showSnackBar(errorSnackBar);
+          }
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(confirmationSnackBar);
   }
 
   final String _hostName;
@@ -64,7 +84,8 @@ class HostCard extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  print("Remving $_hostName");
+                  deletePassword(context);
+                  // print("Remving $_hostName");
                 },
                 icon: Icon(Icons.delete),
               ),
