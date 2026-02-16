@@ -10,8 +10,8 @@ import 'package:passport_mobile/util/network_manager.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  await initLocalStorage();
   WidgetsFlutterBinding.ensureInitialized();
+  await initLocalStorage();
   HttpOverrides.global = AllowUnsecure();
   runApp(
     MultiProvider(
