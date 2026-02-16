@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   await initLocalStorage();
+  WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = AllowUnsecure();
   runApp(
     MultiProvider(
