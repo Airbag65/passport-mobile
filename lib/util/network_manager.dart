@@ -104,3 +104,22 @@ Future<bool> requestPasswordRemoval(String host) async {
   }
   return true;
 }
+
+Future<bool> uploadNewPassword(String hostname, String password) async {
+  AddPasswordRequest req = AddPasswordRequest(
+    hostName: hostname,
+    password: password,
+  );
+  http.Response response = await http.post(
+    Uri.parse("https://192.168.1.151:443/pwd/new"),
+    headers: <String, String>{
+      "Authorization": "Bearer ${getLocalInformation().authToken}",
+      "Content-Type": "application/json",
+    },
+    body: jsonEncode(req.toJson()),
+  );
+  if (response.statusCode != 200) {
+    return false;
+  }
+  return true;
+}

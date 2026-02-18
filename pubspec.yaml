@@ -39,6 +39,7 @@ dependencies:
   http: ^1.6.0
   google_fonts: ^8.0.1
   clipboard: ^3.0.14
+  encrypt: ^5.0.3
 
 dev_dependencies:
   flutter_test:
